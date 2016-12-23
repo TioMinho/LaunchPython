@@ -1,0 +1,28 @@
+#!/bin/bash
+# Set the volume to 100%
+amixer cset numid=1 -- 100%
+amixer set PCM -- 1000
+
+# Configures the path to Launchpython
+cd /home/pi/Launchpython
+
+# Clean-up the files
+echo -e "\c" > input
+echo -e "\c" > leds
+echo -e "\c" > re_input
+echo -e "\c" > directories
+
+# Reads and list all the directories
+for files in *; do
+	if [ -e ${files}/header_sample ]
+	then
+		echo $files >> directories
+	fi
+done
+
+# Launch the application
+python3 launchpad.py &
+python3 launchleds.py &
+python3 ledStacker.py &
+python3 launchpython.py &
+
